@@ -53,15 +53,13 @@
                         
                         <!-- Lencana Active & Butang Delete -->
                         <div class="flex items-center gap-2">
-                            @if(($biller->status ?? 'active') == 'pending')
-                            <!-- Badge Pending (Kuning) -->
-                            <span class="bg-yellow-100 text-yellow-700 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wide flex items-center">
-                                <span class="w-1.5 h-1.5 bg-yellow-500 rounded-full mr-1 animate-pulse"></span> Pending
+                            @if($biller->status == 'active')
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 uppercase tracking-wide">
+                            Active
                             </span>
                             @else
-                            <!-- Badge Active (Hijau) -->
-                            <span class="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wide flex items-center">
-                                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1"></span> Active
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-yellow-100 text-yellow-800 uppercase tracking-wide">
+                              Pending
                             </span>
                             @endif
                             

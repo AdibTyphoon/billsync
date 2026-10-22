@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\BillerController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -59,6 +60,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/billers/{id}', [BillerController::class, 'destroy']);
 
     // --- 2. LALUAN UNTUK ADMIN PORTAL ---
-    Route::get('/admin-portal', [DashboardController::class, 'adminPortal'])->name('admin-portal');
+    Route::get('/admin-portal', [AdminController::class, 'index'])->name('admin-portal');
+    Route::post('/admin/billers', [AdminController::class, 'store']);
+    Route::put('/admin/billers/{id}', [AdminController::class, 'update']);
+    Route::delete('/admin/billers/{id}', [AdminController::class, 'destroy']);
+    Route::put('/admin/subscriptions/{id}/approve', [AdminController::class, 'approve']);
+    Route::delete('/admin/subscriptions/{id}/reject', [AdminController::class, 'reject']);
 
 });

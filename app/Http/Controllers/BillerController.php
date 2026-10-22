@@ -17,7 +17,7 @@ class BillerController extends Controller
         $userBillers = DB::table('user_billers')
             ->join('billers', 'user_billers.biller_id', '=', 'billers.biller_id')
             ->where('user_billers.user_id', Auth::id())
-            ->select('user_billers.id as pivot_id', 'user_billers.status', 'billers.*')
+            ->select('user_billers.id as pivot_id', 'billers.biller_name', 'billers.category', 'billers.sender_email', 'user_billers.status') 
             ->get();
 
         return view('monitored-billers', compact('userBillers', 'masterBillers'));
