@@ -100,10 +100,6 @@ class EmailParserService
         ];
     }
 
-    public function parseNetflixEmail($content)
-    {
-        return [];
-    }
 
     // 2. Enjin Apple Music (Versi Naik Taraf Kebal)
     public function parseAppleMusicEmail($content)

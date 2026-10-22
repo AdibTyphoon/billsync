@@ -24,7 +24,8 @@
                     </p>
                 </div>
                 
-                <a href="{{ url('/baca-emel') }}" class="relative inline-flex items-center justify-center px-6 py-2.5 font-bold text-white transition-all duration-200 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-[0_4px_15px_-3px_rgba(79,70,229,0.4)] hover:shadow-[0_8px_25px_-5px_rgba(79,70,229,0.6)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <!-- BUTANG SYNC: Ditambah fungsi onclick="tunjukSkrinLoading()" -->
+                <a href="{{ url('/baca-emel') }}" onclick="tunjukSkrinLoading()" class="relative inline-flex items-center justify-center px-6 py-2.5 font-bold text-white transition-all duration-200 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-[0_4px_15px_-3px_rgba(79,70,229,0.4)] hover:shadow-[0_8px_25px_-5px_rgba(79,70,229,0.6)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                     <svg class="w-4 h-4 mr-2 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                     </svg>
@@ -265,4 +266,65 @@
             });
         });
     </script>
+
+    <!-- ========================================== -->
+    <!-- SKRIN LOADING SYNC DENGAN QUOTES KEWANGAN  -->
+    <!-- ========================================== -->
+    <div id="syncLoadingScreen" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(17, 24, 39, 0.9); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; font-family: sans-serif; backdrop-filter: blur(8px);">
+        
+        <!-- Animasi Pusing-Pusing -->
+        <div class="loading-spinner"></div>
+        
+        <h2 style="margin-top: 25px; font-size: 1.5rem; font-weight: bold; color: #60A5FA;">Syncing Your Bills...</h2>
+        <p style="color: #9CA3AF; font-size: 0.9rem; margin-top: 5px;">Please wait a moment. Do not close this window.</p>
+        
+        <!-- Kotak Quote -->
+        <div style="margin-top: 40px; max-width: 600px; padding: 20px; background: rgba(255, 255, 255, 0.1); border-radius: 12px; border-left: 5px solid #60A5FA;">
+            <p id="quoteText" style="font-size: 1.2rem; font-style: italic; line-height: 1.6; color: #E5E7EB;"></p>
+        </div>
+    </div>
+
+    <style>
+        /* CSS untuk buat spinner pusing */
+        .loading-spinner {
+            border: 6px solid rgba(255, 255, 255, 0.1);
+            border-top: 6px solid #60A5FA;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: putar 1s linear infinite;
+        }
+        @keyframes putar {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+
+    <script>
+        // Senarai Quotes Kewangan (English Version)
+        const financialQuotes = [
+            "Little by little becomes a mountain. Just make sure it's not a mountain of debt!",
+            "A big salary means nothing without good money management. Live within your means.",
+            "The money you save today are the soldiers that will save you tomorrow.",
+            "Don't buy things you don't need, with money you don't have, to impress people you don't like.",
+            "Wealth isn't about how much money you make, but how much money you keep.",
+            "Financial discipline starts with tracking every penny. Great job keeping your bills in check!",
+            "Debt is like a shadow. The faster you run, the faster it follows. Face it and clear it!",
+            "Rule No. 1: Never lose money. Rule No. 2: Never forget rule No. 1. – Warren Buffett",
+            "A budget is telling your money where to go, instead of wondering where it went."
+        ];
+
+        function tunjukSkrinLoading() {
+            // Pilih nombor rawak berdasarkan jumlah quotes
+            let randomIndex = Math.floor(Math.random() * financialQuotes.length);
+            
+            // Masukkan teks quote ke dalam HTML
+            document.getElementById("quoteText").innerText = '"' + financialQuotes[randomIndex] + '"';
+            
+            // Tunjuk skrin hitam
+            document.getElementById("syncLoadingScreen").style.display = "flex";
+        }
+    </script>
+    <!-- ========================================== -->
+
 </x-app-layout>

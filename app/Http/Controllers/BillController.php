@@ -65,9 +65,8 @@ class BillController extends Controller
                     }
                 }
                 
-                // B. Kategori Apple Music (biller_id = 2)
+            // B. Kategori Ekosistem Apple (Apple Music = ID 2, iCloud = ID 4)
                 elseif (str_contains(strtolower($senderEmail), 'apple.com') || str_contains(strtolower($subject), 'apple')) {
-                    $billerId = 2; 
                     
                     $rawHtml = $message->getHTMLBody();
                     $cleanHtml = html_entity_decode(strip_tags(str_replace(['<br>', '<br/>', '</div>', '</p>', '</tr>', '</td>'], " \n ", $rawHtml)));
@@ -76,7 +75,13 @@ class BillController extends Controller
                     $emailBody = $cleanHtml . " \n " . $rawText; 
                     $bodyLower = strtolower($emailBody);
                     
-                    if (str_contains($bodyLower, 'apple music') || str_contains($bodyLower, 'apple')){
+                    // PEGAWAI TRAFIK CHECK ISI DALAM: iCloud atau Music?
+                    if (str_contains($bodyLower, 'icloud')) {
+                        $billerId = 4; // Campak ke laci iCloud
+                        $data = $parser->parseAppleMusicEmail($emailBody); // Guna enjin sama sebab susunan resit sebiji
+                    } 
+                    elseif (str_contains($bodyLower, 'apple music')) {
+                        $billerId = 2; // Campak ke laci Apple Music
                         $data = $parser->parseAppleMusicEmail($emailBody);
                     }
                 }
