@@ -166,6 +166,57 @@
                         </div>
                     </div>
 
+                    <!-- Mesej Status Berjaya/Gagal -->
+                        @if(session('success'))
+                    <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50">
+                        {{ session('success') }}
+                    </div>
+                        @endif
+
+                        @if(session('error'))
+                    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50">
+                        {{ session('error') }}
+                    </div>
+                        @endif
+
+                    <!-- Telegram Notification Card -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
+                        <div class="flex items-center mb-4">
+                            <div class="text-blue-500 mr-3">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.18-.08-.05-.19-.02-.27 0-.11.03-1.88 1.2-3.32 2.17-.21.14-.4.21-.57.21-.16 0-.38-.05-.62-.13-.39-.13-1.12-.34-1.52-.51-.53-.22-.76-.34-.72-.73.02-.19.14-.38.38-.59 1.5-1.01 5.03-2.48 7.08-3.32 3.37-1.39 4.07-1.63 4.52-1.64.1 0 .31.02.43.13.1.09.13.21.14.31-.01.04-.01.12-.02.25z"/></svg>
+                            </div>
+                         <h3 class="text-lg font-bold text-gray-900">Telegram Bot Notifications</h3>
+                    </div>
+    
+                    <p class="text-sm text-gray-500 mb-5">Receive real-time billing alerts directly via your Telegram app.</p>
+
+                    <div>
+                        @if(Auth::user()->telegram_chat_id)
+            <div class="flex flex-col sm:flex-row gap-3 items-center">
+                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 px-4 flex items-center shadow-sm">
+                    <svg class="w-5 h-5 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <span class="text-sm font-bold text-emerald-800">
+                        Telegram Connected (Active)
+                    </span>
+                </div>
+                <!-- Butang Test Message -->
+                <a href="{{ url('/telegram/test') }}" class="flex items-center justify-center px-4 py-3 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-600 text-sm transition shadow-sm">
+                    Send Test Message
+                </a>
+            </div>
+        @else
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <a href="https://t.me/BillSyncBot?start={{ Auth::user()->id }}" target="_blank" class="flex items-center justify-center px-4 py-2.5 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-600 text-sm transition shadow-sm">
+                            1. Open Bot & Click Start
+                        </a>
+                            <a href="{{ url('/telegram/sync') }}" class="flex items-center justify-center px-4 py-2.5 bg-gray-800 text-white font-bold rounded-xl hover:bg-gray-900 text-sm transition shadow-sm">
+                            2. Verify Connection
+                        </a>
+                    </div>
+                        @endif
+                    </div>
+                </div>
+
                 </div>
             </div>
 

@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\BillerController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\TelegramController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -66,5 +67,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/admin/billers/{id}', [AdminController::class, 'destroy']);
     Route::put('/admin/subscriptions/{id}/approve', [AdminController::class, 'approve']);
     Route::delete('/admin/subscriptions/{id}/reject', [AdminController::class, 'reject']);
+
+    // --- 3. LALUAN UNTUK TELEGRAM BOT ---
+    Route::get('/telegram/sync', [TelegramController::class, 'sync']);
+    Route::get('/telegram/test', [TelegramController::class, 'testMessage']);
 
 });
