@@ -8,26 +8,35 @@ use Carbon\Carbon; // Tambah fungsi masa/tarikh
 
 class DashboardController extends Controller
 {
-    public function index()
+public function index()
     {
         // 1. Tarik senarai bil
-        $bills = Bill::with('biller')->orderBy('created_at', 'desc')->get();
+        $bills = Bill::with('biller')
+                     ->where('user_id', auth()->id())
+                     ->orderBy('created_at', 'desc')
+                     ->get();
 
         // 2. Kira Jumlah Keseluruhan (Belum Dibayar)
-        $totalOutstanding = Bill::where('payment_status', 'unpaid')->sum('amount');
+        $totalOutstanding = Bill::where('user_id', auth()->id())
+                                ->where('payment_status', 'unpaid')
+                                ->sum('amount');
 
         // 3. FUNGSI BARU: Kira Jumlah Dibayar Bulan Ini
         $currentMonth = Carbon::now()->month;
         $currentYear = Carbon::now()->year;
         
-        // TUKAR KAT SINI: Kita guna 'created_at' sebab 'due_date' Apple tu jatuh pada bulan depan (November)
-        $totalPaidThisMonth = Bill::where('payment_status', 'paid')
+        $totalPaidThisMonth = Bill::where('user_id', auth()->id())
+                                  ->where('payment_status', 'paid')
                                   ->whereMonth('created_at', $currentMonth)
                                   ->whereYear('created_at', $currentYear)
                                   ->sum('amount');
 
         // 4. Sediakan Data Untuk Pie Chart (Analitik)
-        $unpaidBills = Bill::with('biller')->where('payment_status', 'unpaid')->get();
+        $unpaidBills = Bill::with('biller')
+                           ->where('user_id', auth()->id())
+                           ->where('payment_status', 'unpaid')
+                           ->get();
+                           
         $chartLabels = [];
         $chartValues = [];
         

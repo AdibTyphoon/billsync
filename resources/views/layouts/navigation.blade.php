@@ -13,7 +13,7 @@
                     </a>
                 </div>
 
-                <!-- Navigation Links (Pengguna Biasa) -->
+                <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
@@ -28,11 +28,13 @@
             <!-- Settings Dropdown & ADMIN BUTTON -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 
-                <!-- BUTANG ADMIN PORTAL (REKA BENTUK EKSKLUSIF) -->
+                <!-- BUTANG ADMIN PORTAL (HANYA UNTUK ADMIN) -->
+                @if(auth()->id() == 1)
                 <a href="{{ route('admin-portal') }}" class="mr-6 inline-flex items-center px-3 py-1.5 bg-gray-900 border border-transparent text-white text-[11px] font-bold uppercase tracking-widest rounded-lg hover:bg-gray-800 transition duration-200 shadow-sm">
                     <svg class="w-4 h-4 mr-1.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                     Admin Portal
                 </a>
+                @endif
 
                 <!-- Settings Dropdown -->
                 <x-dropdown align="right" width="48">
@@ -90,13 +92,15 @@
                 {{ __('Monitored Billers') }}
             </x-responsive-nav-link>
 
-            <!-- BUTANG ADMIN PORTAL UNTUK MOBILE (MENYERLAH) -->
+            <!-- BUTANG ADMIN PORTAL UNTUK MOBILE (HANYA UNTUK ADMIN) -->
+            @if(auth()->id() == 1)
             <div class="px-4 py-3 border-t border-gray-100">
                 <a href="{{ route('admin-portal') }}" class="flex items-center justify-center w-full px-4 py-2 bg-gray-900 text-white text-sm font-bold rounded-xl shadow-sm hover:bg-gray-800 transition">
                     <svg class="w-4 h-4 mr-2 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                     Access Admin Portal
                 </a>
             </div>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
