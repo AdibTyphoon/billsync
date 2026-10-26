@@ -1,76 +1,81 @@
 <x-app-layout>
-    <div class="py-12 bg-gray-50 min-h-screen">
-        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-            
+    <div class="py-10 bg-slate-50 min-h-screen">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
             <!-- Alerts / Notifications -->
             @if (session('success'))
-                <div class="mb-6 bg-emerald-100 border-l-4 border-emerald-500 text-emerald-800 p-4 rounded-r-xl shadow-sm flex items-center" role="alert">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div class="mb-6 flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-900" role="alert">
+                    <svg class="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <div>
-                        <p class="font-bold">Success</p>
-                        <p class="text-sm">{{ session('success') }}</p>
+                        <p class="text-sm font-semibold">Success</p>
+                        <p class="text-sm text-emerald-800">{{ session('success') }}</p>
                     </div>
                 </div>
             @endif
 
-            <!-- Header with Personalized Greeting & Glowing Sync Button -->
-            <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+            <!-- Header: greeting + sync -->
+            <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">
-                        Welcome back, {{ explode(' ', Auth::user()->name)[0] }}! 👋
+                    <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+                        Welcome back, {{ explode(' ', Auth::user()->name)[0] }} 👋
                     </h2>
-                    <p class="text-gray-500 mt-1 text-sm font-medium">
-                        {{ \Carbon\Carbon::now()->format('l, d F Y') }} • Here is your financial overview.
+                    <p class="mt-1 text-sm text-slate-500">
+                        {{ \Carbon\Carbon::now()->format('l, d F Y') }} &middot; Here is your financial overview.
                     </p>
                 </div>
-                
-                <!-- BUTANG SYNC: Ditambah fungsi onclick="tunjukSkrinLoading()" -->
-                <a href="{{ url('/baca-emel') }}" onclick="tunjukSkrinLoading()" class="relative inline-flex items-center justify-center px-6 py-2.5 font-bold text-white transition-all duration-200 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-[0_4px_15px_-3px_rgba(79,70,229,0.4)] hover:shadow-[0_8px_25px_-5px_rgba(79,70,229,0.6)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                    <svg class="w-4 h-4 mr-2 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                <!-- BUTANG SYNC: fungsi onclick="tunjukSkrinLoading()" dikekalkan -->
+                <a href="{{ url('/baca-emel') }}" onclick="tunjukSkrinLoading()"
+                   class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                     </svg>
                     Sync Latest Bills
                 </a>
             </div>
 
-            <!-- ROW 1: Financial Overview Cards (Split into 2) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                
-                <!-- Card 1: Total Outstanding (Red/Warning) -->
-                <div class="bg-white rounded-3xl p-6 lg:p-8 shadow-sm border border-gray-100 flex flex-col justify-between transition duration-300 hover:shadow-md group relative overflow-hidden">
-                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-red-50 rounded-full opacity-50 transition-transform duration-500 group-hover:scale-150"></div>
-                    <div class="relative z-10">
-                        <div class="flex items-center justify-between mb-4">
-                            <p class="text-sm font-bold text-gray-400 uppercase tracking-wider group-hover:text-red-500 transition-colors">Total Outstanding</p>
-                            <div class="bg-red-100 text-red-600 p-2.5 rounded-2xl shadow-sm transform transition duration-300 group-hover:scale-110">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            </div>
+            <!-- ROW 1: Financial overview -->
+            <div class="mb-10 grid grid-cols-1 gap-5 md:grid-cols-5">
+
+                <!-- Card 1: Total Outstanding (the hero) -->
+                <div class="relative overflow-hidden rounded-3xl bg-slate-900 p-7 text-white md:col-span-3 lg:p-9">
+                    <div class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-indigo-500/20 blur-3xl"></div>
+                    <div class="pointer-events-none absolute -bottom-24 left-1/3 h-56 w-56 rounded-full bg-blue-500/10 blur-3xl"></div>
+
+                    <div class="relative">
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm font-medium text-slate-300">Total outstanding</p>
+                            <span class="inline-flex items-center gap-2 rounded-full bg-red-500/15 px-3 py-1 text-xs font-medium text-red-300 ring-1 ring-inset ring-red-400/30">
+                                <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-red-400"></span>
+                                Requires your attention
+                            </span>
                         </div>
-                        <h3 class="text-4xl lg:text-5xl font-black text-gray-900 mb-2">
-                            RM {{ number_format($totalOutstanding, 2) }}
+
+                        <h3 class="mt-5 text-4xl font-bold tracking-tight tabular-nums sm:text-5xl lg:text-6xl">
+                            <span class="mr-1 text-2xl font-semibold text-slate-400 lg:text-3xl">RM</span>{{ number_format($totalOutstanding, 2) }}
                         </h3>
-                        <p class="text-xs lg:text-sm font-semibold text-red-500 flex items-center mt-4">
-                            <span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-2 animate-pulse"></span>
-                            Requires your attention
+
+                        <p class="mt-6 text-sm text-slate-400">
+                            {{ $bills->where('payment_status', 'unpaid')->count() }} unpaid
+                            {{ \Illuminate\Support\Str::plural('bill', $bills->where('payment_status', 'unpaid')->count()) }} waiting for payment
                         </p>
                     </div>
                 </div>
 
-                <!-- Card 2: Total Paid This Month (Green/Success) -->
-                <div class="bg-white rounded-3xl p-6 lg:p-8 shadow-sm border border-gray-100 flex flex-col justify-between transition duration-300 hover:shadow-md group relative overflow-hidden">
-                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-emerald-50 rounded-full opacity-50 transition-transform duration-500 group-hover:scale-150"></div>
-                    <div class="relative z-10">
-                        <div class="flex items-center justify-between mb-4">
-                            <p class="text-sm font-bold text-gray-400 uppercase tracking-wider group-hover:text-emerald-500 transition-colors">Paid This Month</p>
-                            <div class="bg-emerald-100 text-emerald-600 p-2.5 rounded-2xl shadow-sm transform transition duration-300 group-hover:scale-110">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            </div>
+                <!-- Card 2: Total Paid This Month -->
+                <div class="flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-7 md:col-span-2 lg:p-9">
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm font-medium text-slate-500">Paid this month</p>
+                        <div class="rounded-xl bg-emerald-50 p-2 text-emerald-600">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
-                        <h3 class="text-4xl lg:text-5xl font-black text-gray-900 mb-2">
-                            RM {{ number_format($totalPaidThisMonth, 2) }}
+                    </div>
+                    <div>
+                        <h3 class="mt-5 text-3xl font-bold tracking-tight text-slate-900 tabular-nums lg:text-4xl">
+                            <span class="mr-1 text-lg font-semibold text-slate-400">RM</span>{{ number_format($totalPaidThisMonth, 2) }}
                         </h3>
-                        <p class="text-xs lg:text-sm font-semibold text-emerald-500 flex items-center mt-4">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                        <p class="mt-6 flex items-center text-sm font-medium text-emerald-600">
+                            <svg class="mr-1.5 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
                             Great job managing your bills
                         </p>
                     </div>
@@ -78,126 +83,145 @@
 
             </div>
 
-            <!-- ROW 2: Your Active Bills (Fokus Utama Pengguna) -->
-            <div class="mb-5 flex justify-between items-center">
-                <div class="flex items-center">
-                    <h3 class="text-lg font-bold text-gray-900 mr-3">Your Active Bills</h3>
-                    <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-2.5 py-0.5 rounded-full">{{ $bills->count() }} detected</span>
-                </div>
+            <!-- ROW 2: Your Active Bills -->
+            <div class="mb-4 flex items-center gap-3">
+                <h3 class="text-lg font-semibold text-slate-900">Your active bills</h3>
+                <span class="rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-semibold text-indigo-700 ring-1 ring-inset ring-indigo-100">{{ $bills->count() }} detected</span>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+
+            <div class="mb-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
                 @foreach($bills as $bill)
-                <div class="relative bg-gradient-to-br from-blue-600 to-indigo-900 rounded-3xl p-6 shadow-xl text-white transform transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(79,70,229,0.5)] overflow-hidden group">
-                    <div class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-white opacity-10 transition-transform duration-500 group-hover:scale-150"></div>
-                    <div class="absolute bottom-0 left-0 -ml-8 -mb-8 w-24 h-24 rounded-full bg-white opacity-10"></div>
+                    @php
+                        $dueDate   = \Carbon\Carbon::parse($bill->due_date);
+                        $isUnpaid  = $bill->payment_status == 'unpaid';
+                        $isOverdue = $isUnpaid && $dueDate->isPast() && !$dueDate->isToday();
+                    @endphp
 
-                    <div class="relative z-10 flex justify-between items-start">
-                        <div class="flex items-center">
-                            <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center font-bold text-white mr-3">
-                                {{ substr($bill->biller->biller_name ?? 'U', 0, 1) }}
+                    <div class="flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white transition hover:border-slate-300 hover:shadow-lg hover:shadow-slate-200/60">
+                        <!-- status accent -->
+                        <div class="h-1 {{ $isUnpaid ? ($isOverdue ? 'bg-red-500' : 'bg-amber-400') : 'bg-emerald-500' }}"></div>
+
+                        <div class="flex flex-1 flex-col p-6">
+                            <!-- Biller + status -->
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex min-w-0 items-center gap-3">
+                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-sm font-bold text-indigo-600">
+                                        {{ substr($bill->biller->biller_name ?? 'U', 0, 1) }}
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="truncate text-sm font-semibold text-slate-900">{{ $bill->biller->biller_name ?? 'Unknown Provider' }}</p>
+                                        <p class="truncate text-xs text-slate-500">{{ $bill->tajuk_emel }}</p>
+                                    </div>
+                                </div>
+
+                                @if($isUnpaid)
+                                    <span class="shrink-0 rounded-full bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-700 ring-1 ring-inset ring-red-200">Unpaid</span>
+                                @else
+                                    <span class="shrink-0 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-200">Paid</span>
+                                @endif
                             </div>
-                            <div>
-                                <p class="text-blue-100 text-[10px] font-bold tracking-widest uppercase">{{ $bill->biller->biller_name ?? 'Unknown Provider' }}</p>
-                                <p class="text-xs font-medium opacity-90 truncate max-w-[120px]">{{ $bill->tajuk_emel }}</p>
+
+                            <!-- Amount -->
+                            <div class="mt-6">
+                                <p class="text-xs text-slate-500">Amount due</p>
+                                <h3 class="mt-1 text-3xl font-bold tracking-tight text-slate-900 tabular-nums">
+                                    <span class="mr-0.5 text-base font-semibold text-slate-400">RM</span>{{ number_format($bill->amount, 2) }}
+                                </h3>
                             </div>
-                        </div>
-                        
-                        @if($bill->payment_status == 'unpaid')
-                            <span class="bg-red-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-sm uppercase tracking-wide">
-                                Unpaid
-                            </span>
-                        @else
-                            <span class="bg-emerald-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-sm uppercase tracking-wide">
-                                Paid
-                            </span>
-                        @endif
-                    </div>
 
-                    <div class="relative z-10 mt-6">
-                        <p class="text-blue-200 text-xs mb-1 font-medium">Amount Due</p>
-                        <h3 class="text-4xl font-black tracking-tight">RM {{ number_format($bill->amount, 2) }}</h3>
-                    </div>
+                            <!-- Due date -->
+                            <div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
+                                <div>
+                                    <p class="text-xs text-slate-500">Due date</p>
+                                    <p class="text-sm font-semibold text-slate-900">{{ $dueDate->format('d M Y') }}</p>
+                                </div>
+                                @if($isUnpaid)
+                                    <span class="text-xs font-medium {{ $isOverdue ? 'text-red-600' : 'text-amber-600' }}">
+                                        {{ $dueDate->diffForHumans() }}
+                                    </span>
+                                @endif
+                            </div>
 
-                    <div class="relative z-10 mt-8 pt-4 border-t border-white/20 flex justify-between items-center">
-                        <div>
-                            <p class="text-[10px] text-blue-200 uppercase tracking-widest font-bold mb-0.5">Due Date</p>
-                            <p class="font-bold text-sm">{{ \Carbon\Carbon::parse($bill->due_date)->format('d M Y') }}</p>
+                            <!-- Actions -->
+                            @if($isUnpaid)
+                                <div class="mt-5 grid grid-cols-2 gap-2">
+                                    <!-- Butang Pay Now -->
+                                    <a href="{{ $bill->payment_url }}" target="_blank"
+                                       class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2">
+                                        Pay Now
+                                    </a>
+
+                                    <!-- Butang Mark as Paid -->
+                                    <form action="{{ route('bills.mark-as-paid', $bill->bill_id) }}" method="POST" class="contents">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit"
+                                                class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2">
+                                            Mark as Paid
+                                        </button>
+                                    </form>
+                                </div>
+                            @endif
                         </div>
-                        @if($bill->payment_status == 'unpaid')
-                    <div class="flex space-x-2">
-                 <!-- Butang Pay Now -->
-                            <a href="{{ $bill->payment_url }}" target="_blank" class="bg-white text-indigo-700 text-xs font-bold py-2 px-4 rounded-xl shadow-md hover:bg-gray-50 transition duration-200">
-                                Pay Now
-                            </a>
-        
-                <!-- Butang Mark as Paid -->
-                        <form action="{{ route('bills.mark-as-paid', $bill->bill_id) }}" method="POST" class="inline">
-                 @csrf
-                    @method('PATCH')
-                            <button type="submit" class="bg-indigo-600 text-white border border-white text-xs font-bold py-2 px-4 rounded-xl shadow-md hover:bg-indigo-500 transition duration-200">
-                                 Mark as Paid
-                            </button>
-                        </form>
                     </div>
-                @endif
-                    </div>
-                </div>
                 @endforeach
             </div>
 
-            <!-- ROW 3: Bottom Section (Analytics & Upcoming Alerts Table) -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
-                
-                <!-- Left: Upcoming Due Dates Alerts (Spans 2 columns) -->
-                <div class="lg:col-span-2 bg-white rounded-3xl p-6 lg:p-8 shadow-sm border border-gray-100 transition duration-300 hover:shadow-md flex flex-col h-full">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-lg font-bold text-gray-900">Upcoming Due Date Alerts</h3>
-                        <button class="text-sm font-bold text-indigo-600 hover:text-indigo-800 transition">View All &rarr;</button>
+            <!-- ROW 3: Upcoming alerts + analytics -->
+            <div class="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-3">
+
+                <!-- Left: Upcoming Due Dates Alerts -->
+                <div class="flex h-full flex-col rounded-3xl border border-slate-200 bg-white p-6 lg:col-span-2 lg:p-8">
+                    <div class="mb-5 flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-slate-900">Upcoming due dates</h3>
+                        <button class="text-sm font-semibold text-indigo-600 transition hover:text-indigo-800">View all &rarr;</button>
                     </div>
-                    <div class="overflow-x-auto flex-grow">
-                        <table class="w-full text-left border-collapse">
+
+                    <div class="grow overflow-x-auto">
+                        <table class="w-full border-collapse text-left">
                             <thead>
-                                <tr>
-                                    <th class="py-3 px-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Provider</th>
-                                    <th class="py-3 px-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Due Date</th>
-                                    <th class="py-3 px-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Amount</th>
-                                    <th class="py-3 px-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100 text-right">Status</th>
+                                <tr class="border-b border-slate-100 text-xs text-slate-500">
+                                    <th class="px-3 py-3 font-medium">Provider</th>
+                                    <th class="px-3 py-3 font-medium">Due date</th>
+                                    <th class="px-3 py-3 font-medium">Amount</th>
+                                    <th class="px-3 py-3 text-right font-medium">Status</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-50">
+                            <tbody class="divide-y divide-slate-50">
                                 @foreach($bills->where('payment_status', 'unpaid')->take(5) as $alertBill)
-                                <tr class="hover:bg-indigo-50/50 transition duration-150 group">
-                                    <td class="py-4 px-4">
-                                        <div class="flex items-center">
-                                            <div class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-xs mr-3 group-hover:bg-indigo-200 transition">
+                                <tr class="group transition hover:bg-slate-50">
+                                    <td class="px-3 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-xs font-bold text-indigo-600">
                                                 {{ substr($alertBill->biller->biller_name ?? 'U', 0, 1) }}
                                             </div>
-                                            <span class="font-bold text-sm text-gray-800">{{ $alertBill->biller->biller_name ?? 'Unknown' }}</span>
+                                            <span class="text-sm font-semibold text-slate-800">{{ $alertBill->biller->biller_name ?? 'Unknown' }}</span>
                                         </div>
                                     </td>
-                                    <td class="py-4 px-4 text-sm text-red-600 font-bold flex items-center">
-                                        <svg class="w-4 h-4 mr-1.5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                        {{ \Carbon\Carbon::parse($alertBill->due_date)->format('d M Y') }}
+                                    <td class="px-3 py-4">
+                                        <span class="inline-flex items-center gap-1.5 text-sm font-medium text-red-600">
+                                            <svg class="h-4 w-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            {{ \Carbon\Carbon::parse($alertBill->due_date)->format('d M Y') }}
+                                        </span>
                                     </td>
-                                    <td class="py-4 px-4 text-sm font-black text-gray-900">RM {{ number_format($alertBill->amount, 2) }}</td>
-                                    <td class="py-4 px-4 text-right">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-red-100 text-red-800 border border-red-200">
-                                            <span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-1.5 animate-pulse"></span>
-                                            Action Required
+                                    <td class="px-3 py-4 text-sm font-semibold text-slate-900 tabular-nums">RM {{ number_format($alertBill->amount, 2) }}</td>
+                                    <td class="px-3 py-4 text-right">
+                                        <span class="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-700 ring-1 ring-inset ring-red-200">
+                                            <span class="mr-1.5 h-1.5 w-1.5 animate-pulse rounded-full bg-red-500"></span>
+                                            Action required
                                         </span>
                                     </td>
                                 </tr>
                                 @endforeach
-                                
+
                                 @if($bills->where('payment_status', 'unpaid')->isEmpty())
                                 <tr>
                                     <td colspan="4" class="py-12 text-center">
-                                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-100 text-emerald-500 mb-3">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <div class="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-500">
+                                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                         </div>
-                                        <p class="text-sm font-bold text-gray-900">All caught up!</p>
-                                        <p class="text-xs text-gray-500 mt-1">No pending bills require your attention.</p>
+                                        <p class="text-sm font-semibold text-slate-900">All caught up!</p>
+                                        <p class="mt-1 text-xs text-slate-500">No pending bills require your attention.</p>
                                     </td>
                                 </tr>
                                 @endif
@@ -206,12 +230,12 @@
                     </div>
                 </div>
 
-                <!-- Right: Pie Chart / Analytics -->
-                <div class="bg-white rounded-3xl p-6 lg:p-8 shadow-sm border border-gray-100 transition duration-300 hover:shadow-md flex flex-col h-full">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-lg font-bold text-gray-900">Spending Analytics</h3>
+                <!-- Right: Spending analytics -->
+                <div class="flex h-full flex-col rounded-3xl border border-slate-200 bg-white p-6 lg:p-8">
+                    <div class="mb-5">
+                        <h3 class="text-lg font-semibold text-slate-900">Spending analytics</h3>
                     </div>
-                    <div class="w-full relative flex-grow min-h-[250px] flex items-center justify-center">
+                    <div class="relative flex min-h-[260px] w-full grow items-center justify-center">
                         <canvas id="expenseChart"></canvas>
                     </div>
                 </div>
@@ -226,9 +250,31 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const ctx = document.getElementById('expenseChart').getContext('2d');
-            
+
             const labels = {!! json_encode($chartLabels) !!};
             const data = {!! json_encode($chartValues) !!};
+            const total = data.reduce((sum, v) => sum + Number(v || 0), 0);
+
+            // Shows the total in the middle of the doughnut
+            const centerText = {
+                id: 'centerText',
+                afterDraw(chart) {
+                    const { ctx, chartArea } = chart;
+                    if (!chartArea) return;
+                    const x = (chartArea.left + chartArea.right) / 2;
+                    const y = (chartArea.top + chartArea.bottom) / 2;
+                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#64748b';
+                    ctx.font = "500 12px 'Inter', sans-serif";
+                    ctx.fillText('Total', x, y - 14);
+                    ctx.fillStyle = '#0f172a';
+                    ctx.font = "700 20px 'Inter', sans-serif";
+                    ctx.fillText('RM ' + total.toFixed(2), x, y + 10);
+                    ctx.restore();
+                }
+            };
 
             new Chart(ctx, {
                 type: 'doughnut',
@@ -237,38 +283,34 @@
                     datasets: [{
                         data: data,
                         backgroundColor: ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'],
-                        borderWidth: 0,
-                        hoverOffset: 8
+                        borderWidth: 3,
+                        borderColor: '#ffffff',
+                        hoverOffset: 6
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    cutout: '78%',
-                    layout: {
-                        padding: 10
-                    },
+                    cutout: '75%',
+                    layout: { padding: 6 },
                     plugins: {
                         legend: {
                             position: 'bottom',
                             labels: {
-                                padding: 25,
+                                padding: 20,
                                 usePointStyle: true,
                                 pointStyle: 'circle',
                                 boxWidth: 8,
-                                font: {
-                                    size: 11,
-                                    family: "'Inter', sans-serif",
-                                    weight: 'bold'
-                                }
+                                color: '#475569',
+                                font: { size: 11, family: "'Inter', sans-serif", weight: '600' }
                             }
                         },
                         tooltip: {
-                            backgroundColor: 'rgba(17, 24, 39, 0.9)',
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
                             titleFont: { size: 13, family: "'Inter', sans-serif" },
                             bodyFont: { size: 14, weight: 'bold', family: "'Inter', sans-serif" },
                             padding: 12,
-                            cornerRadius: 8,
+                            cornerRadius: 10,
                             callbacks: {
                                 label: function(context) {
                                     return ' RM ' + context.parsed.toFixed(2);
@@ -276,7 +318,8 @@
                             }
                         }
                     }
-                }
+                },
+                plugins: [centerText]
             });
         });
     </script>
@@ -284,33 +327,36 @@
     <!-- ========================================== -->
     <!-- SKRIN LOADING SYNC DENGAN QUOTES KEWANGAN  -->
     <!-- ========================================== -->
-    <div id="syncLoadingScreen" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(17, 24, 39, 0.9); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; font-family: sans-serif; backdrop-filter: blur(8px);">
-        
+    <div id="syncLoadingScreen" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.92); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; padding: 24px; backdrop-filter: blur(8px);">
+
         <!-- Animasi Pusing-Pusing -->
         <div class="loading-spinner"></div>
-        
-        <h2 style="margin-top: 25px; font-size: 1.5rem; font-weight: bold; color: #60A5FA;">Syncing Your Bills...</h2>
-        <p style="color: #9CA3AF; font-size: 0.9rem; margin-top: 5px;">Please wait a moment. Do not close this window.</p>
-        
+
+        <h2 style="margin-top: 25px; font-size: 1.5rem; font-weight: 700; color: #a5b4fc;">Syncing your bills...</h2>
+        <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 5px;">Please wait a moment. Do not close this window.</p>
+
         <!-- Kotak Quote -->
-        <div style="margin-top: 40px; max-width: 600px; padding: 20px; background: rgba(255, 255, 255, 0.1); border-radius: 12px; border-left: 5px solid #60A5FA;">
-            <p id="quoteText" style="font-size: 1.2rem; font-style: italic; line-height: 1.6; color: #E5E7EB;"></p>
+        <div style="margin-top: 40px; max-width: 560px; padding: 20px 24px; background: rgba(255, 255, 255, 0.06); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); border-left: 4px solid #818cf8;">
+            <p id="quoteText" style="font-size: 1.05rem; font-style: italic; line-height: 1.6; color: #e2e8f0;"></p>
         </div>
     </div>
 
     <style>
         /* CSS untuk buat spinner pusing */
         .loading-spinner {
-            border: 6px solid rgba(255, 255, 255, 0.1);
-            border-top: 6px solid #60A5FA;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top: 5px solid #818cf8;
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
+            width: 56px;
+            height: 56px;
             animation: putar 1s linear infinite;
         }
         @keyframes putar {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .loading-spinner { animation-duration: 3s; }
         }
     </style>
 
@@ -331,10 +377,10 @@
         function tunjukSkrinLoading() {
             // Pilih nombor rawak berdasarkan jumlah quotes
             let randomIndex = Math.floor(Math.random() * financialQuotes.length);
-            
+
             // Masukkan teks quote ke dalam HTML
             document.getElementById("quoteText").innerText = '"' + financialQuotes[randomIndex] + '"';
-            
+
             // Tunjuk skrin hitam
             document.getElementById("syncLoadingScreen").style.display = "flex";
         }
