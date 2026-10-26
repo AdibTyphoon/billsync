@@ -146,4 +146,13 @@ class BillController extends Controller
             dd('SISTEM SANGKUT SEBAB: ' . $e->getMessage()); 
         }
     }
+
+            public function markAsPaid($id)
+    {
+                $bill = \App\Models\Bill::where('bill_id', $id)->firstOrFail();
+                $bill->payment_status = 'paid';
+                $bill->save();
+
+            return back()->with('success', 'Status bil berjaya ditukar kepada Paid.');
+    }
 }

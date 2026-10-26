@@ -124,9 +124,23 @@
                             <p class="text-[10px] text-blue-200 uppercase tracking-widest font-bold mb-0.5">Due Date</p>
                             <p class="font-bold text-sm">{{ \Carbon\Carbon::parse($bill->due_date)->format('d M Y') }}</p>
                         </div>
-                        <button class="bg-white text-indigo-700 text-xs font-bold py-2 px-5 rounded-xl shadow-md hover:bg-gray-50 transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600">
-                            Pay Now
-                        </button>
+                        @if($bill->payment_status == 'unpaid')
+                    <div class="flex space-x-2">
+                 <!-- Butang Pay Now -->
+                            <a href="{{ $bill->payment_url }}" target="_blank" class="bg-white text-indigo-700 text-xs font-bold py-2 px-4 rounded-xl shadow-md hover:bg-gray-50 transition duration-200">
+                                Pay Now
+                            </a>
+        
+                <!-- Butang Mark as Paid -->
+                        <form action="{{ route('bills.mark-as-paid', $bill->bill_id) }}" method="POST" class="inline">
+                 @csrf
+                    @method('PATCH')
+                            <button type="submit" class="bg-indigo-600 text-white border border-white text-xs font-bold py-2 px-4 rounded-xl shadow-md hover:bg-indigo-500 transition duration-200">
+                                 Mark as Paid
+                            </button>
+                        </form>
+                    </div>
+                @endif
                     </div>
                 </div>
                 @endforeach

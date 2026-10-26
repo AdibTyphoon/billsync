@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -71,5 +71,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // --- 3. LALUAN UNTUK TELEGRAM BOT ---
     Route::get('/telegram/sync', [TelegramController::class, 'sync']);
     Route::get('/telegram/test', [TelegramController::class, 'testMessage']);
+
+    // --- 4. LALUAN UNTUK PENGURUSAN BIL ---
+    Route::patch('/bills/{id}/mark-as-paid', [BillController::class, 'markAsPaid'])->name('bills.mark-as-paid');
 
 });

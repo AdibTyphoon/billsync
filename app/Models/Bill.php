@@ -28,5 +28,17 @@ class Bill extends Model
         // Parameter: (Nama Model, Foreign Key dalam jadual bills, Primary Key dalam jadual billers)
         return $this->belongsTo(Biller::class, 'biller_id', 'biller_id');
     }
+
+    public function getPaymentUrlAttribute()
+{
+    // Pastikan letak nama column yang betul 
+    return match(strtolower($this->biller_id)) { 
+        '1' => 'https://selfcare.unifi.com.my/billing/pay-for-anyone',
+        '2' => 'https://support.apple.com/billing',
+        '3' => 'https://myaccount.mytnb.com.my/Payment/QuickPay/',
+        '4' => 'https://support.apple.com/billing',
+        default => '#'
+    };
+}
     
 }

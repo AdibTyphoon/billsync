@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('billsync:check-due')->dailyAt('08:00');
     }
-}
+
 
     /**
      * Register the commands for the application.
