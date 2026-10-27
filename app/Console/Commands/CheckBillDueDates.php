@@ -9,7 +9,7 @@ use Carbon\Carbon;
 
 class CheckBillDueDates extends Command
 {
-    // Ini nama command untuk Anda jalankan di terminal nanti
+    // Ini nama command untuk run di terminal nanti
     protected $signature = 'billsync:check-due';
     protected $description = 'Check for outstanding bills and send a Telegram notification 3 days before the due date.';
 
@@ -25,7 +25,7 @@ class CheckBillDueDates extends Command
 
         foreach ($users as $user) {
             // Tarik tagihan yang belum dibayar berdasarkan kolom 'payment_status' = 'unpaid'
-            // NOTA: Pastikan model User Anda memiliki fungsi relationship bills()
+            // NOTA: Pastikan model User memiliki fungsi relationship bills()
             $dueBills = $user->bills()->where('payment_status', 'unpaid')
                              ->where('due_date', '<=', $targetDate)
                              ->get();
@@ -34,7 +34,7 @@ class CheckBillDueDates extends Command
                 continue;
             }
 
-            // Format pesan peringatan (Bahasa Inggris)
+            // Format pesan peringatan 
             $message = "⚠️ *BILLSYNC REMINDER* ⚠️\n\nHi {$user->name}, you have upcoming bills due in 3 days or less:\n\n";
 
             foreach ($dueBills as $bill) {

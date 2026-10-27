@@ -46,7 +46,7 @@ class TelegramController extends Controller
         $user = Auth::user();
         $token = env('TELEGRAM_BOT_TOKEN');
         
-        // Format the message in English
+        // Format message 
         $message = "🎉 Success! BillSync is now officially connected to your Telegram, {$user->name}.\n\nYou will start receiving bill due date notifications right here.";
 
         // Send request to Telegram API

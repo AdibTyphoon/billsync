@@ -54,7 +54,7 @@ class BillController extends Controller
                 $data = null; 
                 $billerId = null;
 
-                // === PEGAWAI TRAFIK BERMULA DI SINI ===
+                // === TRAFFIC CONTROLLER START DI SINI ===
                 
                 // A. Kategori TNB (biller_id = 1)
                 if (str_contains(strtolower($senderEmail), 'tnb.com.my') || str_contains(strtolower($subject), 'tnb')) {
@@ -83,7 +83,7 @@ class BillController extends Controller
                     $emailBody = $cleanHtml . " \n " . $rawText; 
                     $bodyLower = strtolower($emailBody);
                     
-                    // PEGAWAI TRAFIK CHECK ISI DALAM: iCloud atau Music?
+                    // TRAFFIC CONTROLLER CHECK ISI DALAM: iCloud atau Music?
                     if (str_contains($bodyLower, 'icloud')) {
                         $billerId = 4;
                         $data = $parser->parseAppleMusicEmail($emailBody); 
@@ -118,7 +118,7 @@ class BillController extends Controller
                     
                     $bill = \App\Models\Bill::firstOrCreate(
                         [
-                            'user_id' => Auth::id(), // <-- Tukar kepada ID user yang log masuk
+                            'user_id' => Auth::id(), 
                             'biller_id' => $billerId, 
                             'amount' => $data['amount'],
                             'due_date' => $data['due_date'],

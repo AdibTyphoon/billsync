@@ -85,7 +85,7 @@ class EmailParserService
         $dueDate = null;
         if ($dueDateString) {
             try {
-                // Carbon sangat bijak, dia boleh tukar "03 Nov 2026" jadi "2026-11-03" terus
+                
                 $dueDate = \Carbon\Carbon::parse(trim($dueDateString))->format('Y-m-d');
             } catch (\Exception $e) {
                 $dueDate = null;
@@ -96,12 +96,12 @@ class EmailParserService
             'provider' => 'Unifi',
             'amount' => $amount,
             'due_date' => $dueDate,
-            'status' => 'unpaid' // Unifi ni bil bulanan (hutang), so kita letak unpaid
+            'status' => 'unpaid' 
         ];
     }
 
 
-    // 2. Enjin Apple Music (Versi Naik Taraf Kebal)
+    // 2. Enjin Apple Music 
     public function parseAppleMusicEmail($content)
     {
         // 1. Ekstrak Tarikh 

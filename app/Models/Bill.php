@@ -9,7 +9,7 @@ class Bill extends Model
 {
     use HasFactory;
 
-    // Setkan nama Primary Key sebab kau tak guna 'id' biasa
+    // Setkan nama Primary Key sebab tak guna 'id' biasa
     protected $primaryKey = 'bill_id';
 
     // Buka kunci untuk column yang kita nak simpan data nanti
