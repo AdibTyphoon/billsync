@@ -2,14 +2,25 @@
     <div class="py-10 bg-slate-50 min-h-screen">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <!-- Alerts / Notifications -->
-            @if (session('success'))
-                <div class="mb-6 flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-900" role="alert">
-                    <svg class="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <div>
-                        <p class="text-sm font-semibold">Success</p>
-                        <p class="text-sm text-emerald-800">{{ session('success') }}</p>
-                    </div>
+                        <!-- Notifikasi Alert -->
+            @if(session('success'))
+                <div class="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-700 text-sm font-bold flex items-center shadow-sm">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if(session('info'))
+                <div class="mb-6 p-4 rounded-xl bg-blue-50 border border-blue-100 text-blue-700 text-sm font-bold flex items-center shadow-sm">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    {{ session('info') }}
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 text-red-700 text-sm font-bold flex items-center shadow-sm">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    {{ session('error') }}
                 </div>
             @endif
 

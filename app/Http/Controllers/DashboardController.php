@@ -58,9 +58,17 @@ public function index()
 
     public function adminPortal()
     {
-        // if (auth()->user()->role !== 'admin') {
-        //     abort(403, 'ACCESS DENIED. You are not an administrator.');
-        // }
-        return view('admin-portal');
+        // Admin (User ID 1) yang boleh masuk
+        if (auth()->id() != 1) {
+            abort(403, 'Access Denied. You are not an administrator.');
+        }
+
+        // 1. Kira jumlah pengguna sebenar dari pangkalan data
+        $totalActiveUsers = \App\Models\User::count();
+        
+        // 2. Data statik untuk success rate
+        $parsingSuccessRate = '99.1';
+
+        return view('admin-portal', compact('totalActiveUsers', 'parsingSuccessRate'));
     }
 }

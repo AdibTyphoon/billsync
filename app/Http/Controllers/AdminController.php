@@ -9,10 +9,16 @@ class AdminController extends Controller
 {
     public function index()
     {
-        // Tarik semua senarai syarikat dari Master List
+        // 1. Kira jumlah pengguna sebenar dari pangkalan data (Model User)
+        $totalActiveUsers = \App\Models\User::count();
+        
+        // 2. Data statik untuk success rate
+        $parsingSuccessRate = '99.1';
+
+        // 3. Tarik semua senarai syarikat dari Master List
         $billers = DB::table('billers')->get();
         
-        // Tarik senarai langganan user yang berstatus 'pending'
+        // 4. Tarik senarai langganan user yang berstatus 'pending'
         $pendingSubscriptions = DB::table('user_billers')
             ->join('users', 'user_billers.user_id', '=', 'users.user_id')
             ->join('billers', 'user_billers.biller_id', '=', 'billers.biller_id')
@@ -20,8 +26,8 @@ class AdminController extends Controller
             ->where('user_billers.status', 'pending')
             ->get();
             
-        // Hantar data ke fail admin-portal.blade.php
-        return view('admin-portal', compact('billers', 'pendingSubscriptions')); 
+        // 5. Hantar SEMUA data ke fail admin-portal.blade.php
+        return view('admin-portal', compact('billers', 'pendingSubscriptions', 'totalActiveUsers', 'parsingSuccessRate')); 
     }
 
     public function store(Request $request)

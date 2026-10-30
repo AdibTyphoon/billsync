@@ -33,7 +33,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Total Active Users</p>
-                            <h3 class="text-3xl font-black text-gray-900">12,547</h3>
+                            <h3 class="text-3xl font-black text-gray-900">{{ number_format($totalActiveUsers) }}</h3>
                         </div>
                         <span class="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-1 rounded-md uppercase flex items-center">
                             +12% This Month
@@ -45,7 +45,7 @@
                     <div class="flex justify-between items-start">
                         <div class="w-full">
                             <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Parsing Success Rate</p>
-                            <h3 class="text-3xl font-black text-gray-900 mb-2">99.1%</h3>
+                            <h3 class="text-3xl font-black text-gray-900 mb-2">{{ $parsingSuccessRate }}%</h3>
                             <div class="w-full bg-gray-100 rounded-full h-1.5">
                                 <div class="bg-indigo-600 h-1.5 rounded-full" style="width: 99.1%"></div>
                             </div>

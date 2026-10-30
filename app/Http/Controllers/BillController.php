@@ -143,7 +143,11 @@ class BillController extends Controller
             }
 
         } catch (\Exception $e) {
-            dd('SISTEM SANGKUT SEBAB: ' . $e->getMessage()); 
+            // Log ralat kat fail sistem (storage/logs/laravel.log) untuk rujukan admin
+            \Illuminate\Support\Facades\Log::error('Error Sync IMAP: ' . $e->getMessage());
+
+            // Patah balik ke dashboard dan paparkan mesej ralat yang mesra pengguna
+            return redirect()->back()->with('error', 'Failed to sync bills. Please ensure your internet connection is stable and try again shortly.');
         }
     }
 
@@ -153,6 +157,6 @@ class BillController extends Controller
                 $bill->payment_status = 'paid';
                 $bill->save();
 
-            return back()->with('success', 'Status bil berjaya ditukar kepada Paid.');
+            return back()->with('success', 'Bill status successfully changed to Paid.');
     }
 }
