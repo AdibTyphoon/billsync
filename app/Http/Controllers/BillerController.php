@@ -38,12 +38,14 @@ class BillerController extends Controller
         DB::table('user_billers')->insert([
             'user_id' => Auth::id(),
             'biller_id' => $request->biller_id,
-            'status' => 'pending', 
+            // 'status' => 'pending',
+            'status' => 'active',
             'created_at' => now(),
             'updated_at' => now()
         ]);
 
-        return back()->with('success', 'Biller successfully linked! Awaiting verification.');
+        // return back()->with('success', 'Biller successfully linked! Awaiting verification.');
+        return back()->with('success', 'Biller successfully linked and active!');
     }
 
     public function destroy($id)

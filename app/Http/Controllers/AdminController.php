@@ -19,12 +19,13 @@ class AdminController extends Controller
         $billers = DB::table('billers')->get();
         
         // 4. Tarik senarai langganan user yang berstatus 'pending'
-        $pendingSubscriptions = DB::table('user_billers')
-            ->join('users', 'user_billers.user_id', '=', 'users.user_id')
-            ->join('billers', 'user_billers.biller_id', '=', 'billers.biller_id')
-            ->select('user_billers.id as sub_id', 'users.name as user_name', 'billers.biller_name', 'user_billers.created_at')
-            ->where('user_billers.status', 'pending')
-            ->get();
+        // $pendingSubscriptions = DB::table('user_billers')
+        //     ->join('users', 'user_billers.user_id', '=', 'users.user_id')
+        //     ->join('billers', 'user_billers.biller_id', '=', 'billers.biller_id')
+        //     ->select('user_billers.id as sub_id', 'users.name as user_name', 'billers.biller_name', 'user_billers.created_at')
+        //     ->where('user_billers.status', 'pending')
+        //     ->get();
+        $pendingSubscriptions = collect();
             
         // 5. Hantar SEMUA data ke fail admin-portal.blade.php
         return view('admin-portal', compact('billers', 'pendingSubscriptions', 'totalActiveUsers', 'parsingSuccessRate')); 
@@ -72,19 +73,19 @@ class AdminController extends Controller
     }
 
     // Luluskan langganan (Tukar pending jadi active)
-    public function approve($id)
-    {
-        DB::table('user_billers')->where('id', $id)->update([
-            'status' => 'active',
-            'updated_at' => now()
-        ]);
-        return back()->with('success', 'User subscription officially approved!');
-    }
+    // public function approve($id)
+    // {
+    //     DB::table('user_billers')->where('id', $id)->update([
+    //         'status' => 'active',
+    //         'updated_at' => now()
+    //     ]);
+    //     return back()->with('success', 'User subscription officially approved!');
+    // }
 
     // Tolak langganan (Padam rekod dari user_billers)
-    public function reject($id)
-    {
-        DB::table('user_billers')->where('id', $id)->delete();
-        return back()->with('success', 'User subscription rejected and removed.');
-    }
+    // public function reject($id)
+    // {
+    //     DB::table('user_billers')->where('id', $id)->delete();
+    //     return back()->with('success', 'User subscription rejected and removed.');
+    // }
 }

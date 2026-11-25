@@ -67,7 +67,7 @@
                 </div>
             </div>
 
-            <!-- Pending User Subscriptions Table -->
+            {{-- Pending User Subscriptions Table (Disabled - Auto-Approve Active)
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-orange-100 mb-8 overflow-hidden">
                 <div class="flex justify-between items-center mb-6">
                     <div class="flex items-center">
@@ -124,6 +124,7 @@
                     </div>
                 @endif
             </div>
+            --}}
 
             <!-- Target Biller Configurations Table -->
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 mb-8 overflow-hidden">
