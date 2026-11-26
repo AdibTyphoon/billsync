@@ -22,6 +22,7 @@ class Bill extends Model
         'amount',
         'due_date',
         'payment_status',
+        'paid_at',
     ];
     public function biller()
     {
@@ -33,9 +34,9 @@ class Bill extends Model
 {
     // Pastikan letak nama column yang betul 
     return match(strtolower($this->biller_id)) { 
-        '1' => 'https://selfcare.unifi.com.my/billing/pay-for-anyone',
+        '1' => 'https://myaccount.mytnb.com.my/Payment/QuickPay/',
         '2' => 'https://support.apple.com/billing',
-        '3' => 'https://myaccount.mytnb.com.my/Payment/QuickPay/',
+        '3' => 'https://selfcare.unifi.com.my/billing/pay-for-anyone',
         '4' => 'https://support.apple.com/billing',
         default => '#'
     };

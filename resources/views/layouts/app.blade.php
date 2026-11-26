@@ -4,6 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta name="theme-color" content="#4f46e5">
+        <link rel="manifest" href="/manifest.json">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -13,9 +15,18 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function () {
+                    navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function (error) {
+                        console.warn('BillSync offline support could not be enabled.', error);
+                    });
+                });
+            }
+        </script>
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen bg-slate-50">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
@@ -28,7 +39,7 @@
             @endif
 
             <!-- Page Content -->
-            <main>
+            <main class="pb-20 sm:pb-0">
                 {{ $slot }}
             </main>
         </div>

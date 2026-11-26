@@ -13,6 +13,8 @@ public function index()
         // 1. Tarik senarai bil
         $bills = Bill::with('biller')
                      ->where('user_id', auth()->id())
+                     ->orderByRaw("CASE WHEN payment_status = 'unpaid' THEN 0 ELSE 1 END")
+                     ->orderBy('due_date', 'asc')
                      ->orderBy('created_at', 'desc')
                      ->get();
 
@@ -27,8 +29,8 @@ public function index()
         
         $totalPaidThisMonth = Bill::where('user_id', auth()->id())
                                   ->where('payment_status', 'paid')
-                                  ->whereMonth('created_at', $currentMonth)
-                                  ->whereYear('created_at', $currentYear)
+                                  ->whereMonth('paid_at', $currentMonth)
+                                  ->whereYear('paid_at', $currentYear)
                                   ->sum('amount');
 
         // 4. Sediakan Data Untuk Pie Chart (Analitik)

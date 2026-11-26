@@ -13,7 +13,6 @@
         ];
 
         $billerCount    = count($billers);
-        $readyCount     = collect($billers)->filter(fn ($b) => filled($b->amount_regex) && filled($b->date_regex))->count();
         $inputClass     = 'w-full rounded-lg border-slate-300 text-sm shadow-sm placeholder:text-slate-400 focus:border-indigo-500 focus:ring-indigo-500';
         $regexClass     = 'w-full rounded-lg border-slate-300 bg-white font-mono text-xs shadow-sm placeholder:text-slate-400 focus:border-indigo-500 focus:ring-indigo-500';
     @endphp
@@ -59,7 +58,7 @@
                     </div>
                     <div>
                         <h2 class="text-3xl font-bold tracking-tight text-slate-900">Admin Portal</h2>
-                        <p class="mt-1 max-w-xl text-sm leading-relaxed text-slate-500">Manage target biller email addresses, parsing patterns, and system health.</p>
+                        <p class="mt-1 max-w-xl text-sm leading-relaxed text-slate-500">Manage billers, sender email addresses, and system health.</p>
                     </div>
                 </div>
 
@@ -177,7 +176,7 @@
                         </span>
                         <div>
                             <h3 class="text-lg font-semibold tracking-tight text-slate-900">Target Biller Email Configurations</h3>
-                            <p class="tabular text-xs text-slate-500">{{ $billerCount }} {{ \Illuminate\Support\Str::plural('biller', $billerCount) }} &middot; {{ $readyCount }} with both rules set</p>
+                            <p class="tabular text-xs text-slate-500">{{ $billerCount }} {{ \Illuminate\Support\Str::plural('biller', $billerCount) }}</p>
                         </div>
                     </div>
 
@@ -207,13 +206,12 @@
                 </div>
 
                 <div class="overflow-x-auto">
-                    <table class="w-full min-w-[820px] border-collapse text-left">
+                    <table class="w-full min-w-[720px] border-collapse text-left">
                         <thead>
                             <tr class="border-b border-slate-100 text-xs font-semibold text-slate-500">
                                 <th scope="col" class="px-6 py-3">Biller identity</th>
                                 <th scope="col" class="px-4 py-3">Category</th>
                                 <th scope="col" class="px-4 py-3">Target sender email</th>
-                                <th scope="col" class="px-4 py-3">Parsing rules</th>
                                 <th scope="col" class="px-6 py-3 text-right">Action</th>
                             </tr>
                         </thead>
@@ -222,9 +220,6 @@
                             @foreach($billers as $biller)
                             @php
                                 $category  = $biller->category ?? 'Service';
-                                $hasAmount = filled($biller->amount_regex);
-                                $hasDate   = filled($biller->date_regex);
-                                $isReady   = $hasAmount && $hasDate;
                             @endphp
                             <tr data-biller
                                 data-category="{{ $category }}"
@@ -237,11 +232,6 @@
                                         </div>
                                         <div class="min-w-0">
                                             <span class="block truncate text-sm font-semibold text-slate-900">{{ $biller->biller_name }}</span>
-                                            @if($isReady)
-                                                <span class="text-xs font-medium text-emerald-600">Ready to parse</span>
-                                            @else
-                                                <span class="text-xs font-medium text-amber-600">Needs parsing rules</span>
-                                            @endif
                                         </div>
                                     </div>
                                 </td>
@@ -251,43 +241,10 @@
                                 <td class="px-4 py-4">
                                     <span class="block max-w-[240px] truncate text-sm text-slate-700" title="{{ $biller->sender_email }}">{{ $biller->sender_email }}</span>
                                 </td>
-                                <td class="px-4 py-4">
-                                    <div class="flex flex-col gap-1">
-                                        @if($hasAmount)
-                                            <button type="button" data-copy="{{ $biller->amount_regex }}" data-label="Amount regex" title="Click to copy amount regex" class="flex w-full max-w-[270px] items-center gap-2 rounded-lg px-2 py-1 text-left transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
-                                                <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" aria-hidden="true"></span>
-                                                <span class="w-14 shrink-0 text-xs font-semibold text-slate-600">Amount</span>
-                                                <code class="min-w-0 flex-1 truncate font-mono text-[11px] text-slate-500">{{ $biller->amount_regex }}</code>
-                                                <svg class="h-3.5 w-3.5 shrink-0 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                                            </button>
-                                        @else
-                                            <div class="flex items-center gap-2 px-2 py-1">
-                                                <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" aria-hidden="true"></span>
-                                                <span class="w-14 shrink-0 text-xs font-semibold text-slate-600">Amount</span>
-                                                <span class="text-[11px] font-medium text-amber-600">Not set</span>
-                                            </div>
-                                        @endif
-
-                                        @if($hasDate)
-                                            <button type="button" data-copy="{{ $biller->date_regex }}" data-label="Due date regex" title="Click to copy due date regex" class="flex w-full max-w-[270px] items-center gap-2 rounded-lg px-2 py-1 text-left transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
-                                                <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" aria-hidden="true"></span>
-                                                <span class="w-14 shrink-0 text-xs font-semibold text-slate-600">Due date</span>
-                                                <code class="min-w-0 flex-1 truncate font-mono text-[11px] text-slate-500">{{ $biller->date_regex }}</code>
-                                                <svg class="h-3.5 w-3.5 shrink-0 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                                            </button>
-                                        @else
-                                            <div class="flex items-center gap-2 px-2 py-1">
-                                                <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" aria-hidden="true"></span>
-                                                <span class="w-14 shrink-0 text-xs font-semibold text-slate-600">Due date</span>
-                                                <span class="text-[11px] font-medium text-amber-600">Not set</span>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-2">
                                         <!-- Edit Button -->
-                                        <button type="button" onclick="openModal('editBillerModal{{ $biller->biller_id }}')" class="rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 transition hover:bg-indigo-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Edit / Regex</button>
+                                        <button type="button" onclick="openModal('editBillerModal{{ $biller->biller_id }}')" class="rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 transition hover:bg-indigo-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Edit</button>
 
                                         <!-- Delete Form -->
                                         <form action="{{ url('/admin/billers/' . $biller->biller_id) }}" method="POST" data-name="{{ $biller->biller_name }}" onsubmit="return confirm('WARNING: Deleting ' + this.dataset.name + ' will also remove it from all user monitoring lists. Proceed?');">

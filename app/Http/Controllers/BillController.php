@@ -125,7 +125,8 @@ class BillController extends Controller
                         ],
                         [
                             'tajuk_emel' => $subject,
-                            'payment_status' => $data['status'] ?? 'unpaid'
+                            'payment_status' => $data['status'] ?? 'unpaid',
+                            'paid_at' => ($data['status'] ?? 'unpaid') === 'paid' ? now() : null,
                         ]
                     );
 
@@ -137,7 +138,8 @@ class BillController extends Controller
 
             // 6. FINAL RESULT
             if(count($savedBills) > 0) {
-                return redirect()->back()->with('success', 'Sync successful! New bills have been added to your dashboard.');
+                $billWord = count($savedBills) === 1 ? 'bill' : 'bills';
+                return redirect()->back()->with('success', 'Sync complete — ' . count($savedBills) . ' new ' . $billWord . ' added to your dashboard.');
             } else {
                 return redirect()->back()->with('info', 'Your dashboard is already up to date. No new bills found.');
             }
@@ -153,8 +155,11 @@ class BillController extends Controller
 
             public function markAsPaid($id)
     {
-                $bill = \App\Models\Bill::where('bill_id', $id)->firstOrFail();
+                $bill = \App\Models\Bill::where('bill_id', $id)
+                    ->where('user_id', Auth::id())
+                    ->firstOrFail();
                 $bill->payment_status = 'paid';
+                $bill->paid_at = now();
                 $bill->save();
 
             return back()->with('success', 'Bill status successfully changed to Paid.');

@@ -31,6 +31,9 @@
                     </h1>
                     <p class="mt-1.5 text-sm text-slate-500">
                         {{ \Carbon\Carbon::now()->format('l, d F Y') }} <span class="px-1">&middot;</span> Your bills, at a glance.
+                        @if($bills->isNotEmpty())
+                            <span class="mt-1 block text-xs text-slate-400">Latest bill found {{ \Carbon\Carbon::parse($bills->max('extracted_at'))->diffForHumans() }}</span>
+                        @endif
                     </p>
                 </div>
 
@@ -50,9 +53,9 @@
 
                     <div class="flex flex-wrap items-center justify-between gap-3">
                         <p class="text-sm font-medium text-slate-300">Total outstanding</p>
-                        <span class="inline-flex items-center gap-2 rounded-full bg-rose-400/10 px-3 py-1.5 text-xs font-semibold text-rose-200 ring-1 ring-inset ring-rose-300/20">
-                            <span class="h-1.5 w-1.5 rounded-full bg-rose-400"></span>
-                            Requires attention
+                        <span class="inline-flex items-center gap-2 rounded-full {{ $bills->where('payment_status', 'unpaid')->isEmpty() ? 'bg-emerald-400/10 text-emerald-200 ring-emerald-300/20' : 'bg-rose-400/10 text-rose-200 ring-rose-300/20' }} px-3 py-1.5 text-xs font-semibold ring-1 ring-inset">
+                            <span class="h-1.5 w-1.5 rounded-full {{ $bills->where('payment_status', 'unpaid')->isEmpty() ? 'bg-emerald-400' : 'bg-rose-400' }}"></span>
+                            {{ $bills->where('payment_status', 'unpaid')->isEmpty() ? 'All caught up' : 'Requires attention' }}
                         </span>
                     </div>
 
@@ -85,8 +88,9 @@
                             <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-50">
                                 <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             </span>
-                            Bills marked paid this month
+                            Confirmed payments recorded this month
                         </p>
+                        <p class="mt-2 pl-8 text-xs text-slate-400">Payment totals update when a bill is marked paid.</p>
                     </div>
                 </div>
             </section>
@@ -101,27 +105,66 @@
                         <p class="mt-1 text-sm text-slate-500">Review due dates and keep your bills up to date.</p>
                     </div>
 
+                    @if($bills->isNotEmpty())
                     <div class="flex flex-wrap gap-2" role="group" aria-label="Filter bills">
                         <button type="button" class="bill-filter rounded-full bg-slate-950 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2" data-filter="all" aria-pressed="true">All</button>
                         <button type="button" class="bill-filter rounded-full border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2" data-filter="unpaid" aria-pressed="false">Unpaid</button>
                         <button type="button" class="bill-filter rounded-full border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2" data-filter="overdue" aria-pressed="false">Overdue</button>
                         <button type="button" class="bill-filter rounded-full border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2" data-filter="paid" aria-pressed="false">Paid</button>
                     </div>
+                    @endif
                 </div>
 
+                @if($bills->isEmpty())
+                    <div class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm shadow-slate-900/5">
+                        <div class="grid items-center gap-8 p-7 sm:p-10 lg:grid-cols-[1.2fr_0.8fr] lg:p-12">
+                            <div>
+                                <span class="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 ring-1 ring-inset ring-indigo-100">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-indigo-500"></span>
+                                    Your bill inbox is ready
+                                </span>
+                                <h3 class="mt-5 max-w-xl text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">Bring your monthly bills into one clear view.</h3>
+                                <p class="mt-3 max-w-xl text-sm leading-6 text-slate-500">Choose the billers you want to monitor, then sync your email to find recent bills and due dates.</p>
+                                <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+                                    <a href="{{ route('monitored-billers') }}" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:-translate-y-0.5 hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2">
+                                        Choose billers
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7-7 7 7-7 7"></path></svg>
+                                    </a>
+                                    <a href="{{ url('/baca-emel') }}" onclick="tunjukSkrinLoading()" class="inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2">Sync email</a>
+                                </div>
+                                <p class="mt-4 text-xs text-slate-400">BillSync checks recent billing emails from the billers you select.</p>
+                            </div>
+                            <div class="relative mx-auto w-full max-w-sm rounded-3xl bg-slate-950 p-6 text-white shadow-xl shadow-indigo-950/15">
+                                <div class="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-indigo-500/20 blur-2xl"></div>
+                                <div class="relative flex items-center justify-between">
+                                    <span class="text-sm font-medium text-slate-300">Your next bill</span>
+                                    <span class="rounded-full bg-white/10 px-2.5 py-1 text-xs font-semibold text-indigo-200">Coming soon</span>
+                                </div>
+                                <div class="relative mt-8 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+                                    <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-400/15 text-indigo-200">
+                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 1 4 16.5v-11ZM4 16.5A2.5 2.5 0 0 1 6.5 14H20M8 7h8m-8 3h5"></path></svg>
+                                    </span>
+                                    <span><span class="block text-sm font-semibold">Bills, together</span><span class="mt-1 block text-xs text-slate-400">Amounts · due dates · status</span></span>
+                                </div>
+                                <div class="relative mt-5 flex items-center gap-2 text-xs text-slate-400"><span class="h-2 w-2 rounded-full bg-emerald-400"></span>Ready when you are</div>
+                            </div>
+                        </div>
+                    </div>
+                @else
                 <div id="billCards" class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
                     @foreach($bills as $bill)
                         @php
                             $dueDate   = \Carbon\Carbon::parse($bill->due_date);
                             $isUnpaid  = $bill->payment_status == 'unpaid';
                             $isOverdue = $isUnpaid && $dueDate->isPast() && !$dueDate->isToday();
-                            $isDueSoon = $isUnpaid && !$isOverdue && $dueDate->isBetween(\Carbon\Carbon::today(), \Carbon\Carbon::today()->copy()->addDays(7)->endOfDay());
+                            $isDueToday = $isUnpaid && $dueDate->isToday();
+                            $isDueSoon = $isUnpaid && !$isOverdue && !$isDueToday && $dueDate->isBetween(\Carbon\Carbon::today(), \Carbon\Carbon::today()->copy()->addDays(7)->endOfDay());
                             $billFilter = $isOverdue ? 'overdue' : ($isUnpaid ? 'unpaid' : 'paid');
                         @endphp
 
                         <article class="bill-card flex flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm shadow-slate-900/5 transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg hover:shadow-slate-900/10"
                                  data-status="{{ $billFilter }}">
-                            <div class="h-1 {{ $isOverdue ? 'bg-rose-500' : ($isDueSoon ? 'bg-amber-400' : ($isUnpaid ? 'bg-indigo-400' : 'bg-emerald-500')) }}"></div>
+                            <div class="h-1 {{ $isOverdue ? 'bg-rose-500' : (($isDueSoon || $isDueToday) ? 'bg-amber-400' : ($isUnpaid ? 'bg-indigo-400' : 'bg-emerald-500')) }}"></div>
 
                             <div class="flex flex-1 flex-col p-5 sm:p-6">
                                 <div class="flex items-start justify-between gap-3">
@@ -139,6 +182,8 @@
                                         <span class="shrink-0 rounded-full bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700 ring-1 ring-inset ring-rose-200">Overdue</span>
                                     @elseif($isDueSoon)
                                         <span class="shrink-0 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 ring-1 ring-inset ring-amber-200">Due soon</span>
+                                    @elseif($isDueToday)
+                                        <span class="shrink-0 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 ring-1 ring-inset ring-amber-200">Due today</span>
                                     @elseif($isUnpaid)
                                         <span class="shrink-0 rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700 ring-1 ring-inset ring-indigo-200">Unpaid</span>
                                     @else
@@ -159,8 +204,8 @@
                                         <p class="mt-1 text-sm font-semibold text-slate-900">{{ $dueDate->format('d M Y') }}</p>
                                     </div>
                                     @if($isUnpaid)
-                                        <span class="inline-flex items-center gap-1.5 text-right text-xs font-semibold {{ $isOverdue ? 'text-rose-600' : ($isDueSoon ? 'text-amber-700' : 'text-slate-500') }}">
-                                            <span class="h-1.5 w-1.5 rounded-full {{ $isOverdue ? 'bg-rose-500' : ($isDueSoon ? 'bg-amber-400' : 'bg-slate-300') }}"></span>
+                                        <span class="inline-flex items-center gap-1.5 text-right text-xs font-semibold {{ $isOverdue ? 'text-rose-600' : (($isDueSoon || $isDueToday) ? 'text-amber-700' : 'text-slate-500') }}">
+                                            <span class="h-1.5 w-1.5 rounded-full {{ $isOverdue ? 'bg-rose-500' : (($isDueSoon || $isDueToday) ? 'bg-amber-400' : 'bg-slate-300') }}"></span>
                                             {{ $dueDate->diffForHumans() }}
                                         </span>
                                     @endif
@@ -172,7 +217,7 @@
                                         <div class="grid grid-cols-2 gap-2">
                                             <a href="{{ $bill->payment_url }}" target="_blank" rel="noopener noreferrer"
                                                class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2">
-                                                Open payment link
+                                                Pay bill
                                                 <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                                             </a>
 
@@ -196,6 +241,7 @@
                     <p class="text-sm font-semibold text-slate-800">No bills in this view</p>
                     <p class="mt-1 text-xs text-slate-500">Choose another filter to see your bills.</p>
                 </div>
+                @endif
             </section>
 
             <section class="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-3" aria-label="Due dates and spending analytics">
@@ -221,7 +267,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100">
-                                @foreach($bills->where('payment_status', 'unpaid')->take(5) as $alertBill)
+                                @foreach($bills->where('payment_status', 'unpaid')->sortBy('due_date')->take(5) as $alertBill)
                                     @php
                                         $alertDueDate = \Carbon\Carbon::parse($alertBill->due_date);
                                         $alertIsOverdue = $alertDueDate->isPast() && !$alertDueDate->isToday();
@@ -275,9 +321,19 @@
                         <h2 class="text-lg font-bold tracking-tight text-slate-950">Spending analytics</h2>
                         <p class="mt-1 text-sm text-slate-500">A breakdown of your tracked bills.</p>
                     </div>
-                    <div class="relative mt-4 flex min-h-[280px] w-full grow items-center justify-center">
-                        <canvas id="expenseChart" aria-label="Spending analytics doughnut chart" role="img"></canvas>
-                    </div>
+                    @if(count($chartValues) > 0)
+                        <div class="relative mt-4 flex min-h-[280px] w-full grow items-center justify-center">
+                            <canvas id="expenseChart" aria-label="Spending analytics doughnut chart" role="img"></canvas>
+                        </div>
+                    @else
+                        <div class="mt-5 flex min-h-[240px] grow flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/70 px-6 text-center">
+                            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-slate-400 shadow-sm ring-1 ring-slate-200">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 19V5m0 14h16M8 15v-4m4 4V7m4 8v-6"></path></svg>
+                            </span>
+                            <p class="mt-4 text-sm font-semibold text-slate-800">Your bill breakdown will appear here</p>
+                            <p class="mt-1 max-w-xs text-xs leading-5 text-slate-500">Once unpaid bills are detected, you can see where your upcoming payments are going.</p>
+                        </div>
+                    @endif
                 </div>
             </section>
 
@@ -403,15 +459,13 @@
         });
     </script>
 
-    <div id="syncLoadingScreen" style="display: none; position: fixed; inset: 0; z-index: 9999; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; padding: 24px; background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(10px);">
+    <div id="syncLoadingScreen" role="status" aria-live="polite" style="display: none; position: fixed; inset: 0; z-index: 9999; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; padding: 24px; background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(10px);">
         <div class="loading-spinner" aria-hidden="true"></div>
 
         <h2 style="margin-top: 25px; font-size: 1.5rem; font-weight: 700; color: #c7d2fe;">Syncing your bills...</h2>
-        <p style="color: #cbd5e1; font-size: 0.9rem; margin-top: 5px;">Please wait a moment while we check your latest billing emails.</p>
+        <p style="color: #cbd5e1; font-size: 0.9rem; margin-top: 5px;">Checking the billers you follow for recent bills and due dates.</p>
 
-        <div style="margin-top: 32px; max-width: 560px; padding: 20px 24px; background: rgba(255, 255, 255, 0.06); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.12); border-left: 4px solid #818cf8;">
-            <p id="quoteText" style="font-size: 1.05rem; font-style: italic; line-height: 1.6; color: #e2e8f0;"></p>
-        </div>
+        <p style="margin-top: 20px; max-width: 360px; color: #94a3b8; font-size: 0.8rem; line-height: 1.6;">This can take a little while. You can stay on this page while the sync runs.</p>
     </div>
 
     <style>
@@ -435,27 +489,9 @@
     </style>
 
     <script>
-        const financialQuotes = [
-            "Little by little becomes a mountain. Just make sure it's not a mountain of debt!",
-            "A big salary means nothing without good money management. Live within your means.",
-            "The money you save today are the soldiers that will save you tomorrow.",
-            "Don't buy things you don't need, with money you don't have, to impress people you don't like.",
-            "Wealth isn't about how much money you make, but how much money you keep.",
-            "Financial discipline starts with tracking every penny. Great job keeping your bills in check!",
-            "Debt is like a shadow. The faster you run, the faster it follows. Face it and clear it!",
-            "Rule No. 1: Never lose money. Rule No. 2: Never forget rule No. 1. – Warren Buffett",
-            "A budget is telling your money where to go, instead of wondering where it went."
-        ];
-
         function tunjukSkrinLoading() {
-            const quoteText = document.getElementById("quoteText");
             const syncLoadingScreen = document.getElementById("syncLoadingScreen");
-
-            if (!quoteText || !syncLoadingScreen) return;
-
-            const randomIndex = Math.floor(Math.random() * financialQuotes.length);
-            quoteText.innerText = '"' + financialQuotes[randomIndex] + '"';
-            syncLoadingScreen.style.display = "flex";
+            if (syncLoadingScreen) syncLoadingScreen.style.display = "flex";
         }
     </script>
 </x-app-layout>
