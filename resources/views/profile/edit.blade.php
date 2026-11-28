@@ -1,6 +1,6 @@
 <x-app-layout>
-    <div class="min-h-screen bg-slate-50 py-8 sm:py-12">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="min-h-screen min-w-0 bg-slate-50 py-7 sm:py-10">
+        <div class="mx-auto min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8">
 
             <header class="mb-8">
                 <p class="text-xs font-bold uppercase tracking-[0.18em] text-indigo-600">BillSync settings</p>
@@ -8,11 +8,11 @@
                 <p class="mt-2 text-sm text-slate-500">Manage your personal information and security preferences.</p>
             </header>
 
-            <div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-2 lg:gap-8">
+            <div class="grid min-w-0 grid-cols-1 items-stretch gap-6 lg:grid-cols-2 lg:gap-8">
 
-                <div class="space-y-6">
-                    <section class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-900/5 transition duration-200 hover:shadow-md sm:p-8">
-                        <div class="mb-7 flex items-center gap-3">
+                <div class="min-w-0 space-y-6">
+                    <section class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm shadow-slate-900/5 transition duration-200 hover:shadow-md sm:p-7">
+                        <div class="mb-5 flex items-center gap-3">
                             <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
                                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                             </span>
@@ -22,12 +22,12 @@
                             </div>
                         </div>
 
-                        <div class="mb-8 flex flex-col items-center rounded-2xl bg-slate-50 px-4 py-6">
+                        <div class="mb-6 flex flex-col items-center rounded-2xl bg-slate-50 px-4 py-5">
                             <div class="flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-indigo-600 to-violet-600 text-2xl font-bold text-white shadow-lg shadow-indigo-600/20">
                                 {{ substr(Auth::user()->name, 0, 2) }}
                             </div>
                             <p class="mt-3 text-sm font-semibold text-slate-900">{{ Auth::user()->name }}</p>
-                            <p class="mt-1 text-xs text-slate-500">{{ Auth::user()->email }}</p>
+                            <p class="mt-1 max-w-full break-all text-center text-xs text-slate-500">{{ Auth::user()->email }}</p>
                         </div>
 
                         <form id="send-verification" method="post" action="{{ route('verification.send') }}">
@@ -41,7 +41,7 @@
                             <div>
                                 <label for="name" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500">Full name</label>
                                 <input id="name" name="name" type="text"
-                                       class="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
+                                       class="block min-h-11 w-full min-w-0 rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-base text-slate-900 shadow-sm transition placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 sm:text-sm"
                                        value="{{ old('name', Auth::user()->name) }}" required autofocus autocomplete="name" />
                                 <x-input-error class="mt-2" :messages="$errors->get('name')" />
                             </div>
@@ -49,7 +49,7 @@
                             <div>
                                 <label for="email" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500">Email address</label>
                                 <input id="email" name="email" type="email"
-                                       class="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
+                                       class="block min-h-11 w-full min-w-0 rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-base text-slate-900 shadow-sm transition placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 sm:text-sm"
                                        value="{{ old('email', Auth::user()->email) }}" required autocomplete="username" />
                                 <x-input-error class="mt-2" :messages="$errors->get('email')" />
                             </div>
@@ -69,8 +69,8 @@
                         </form>
                     </section>
 
-                    <section class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-900/5 transition duration-200 hover:shadow-md sm:p-8">
-                        <div class="mb-7 flex items-center gap-3">
+                    <section class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm shadow-slate-900/5 transition duration-200 hover:shadow-md sm:p-7">
+                        <div class="mb-5 flex flex-wrap items-center gap-3">
                             <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
                                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                             </span>
@@ -91,7 +91,7 @@
                             <div>
                                 <label for="update_password_current_password" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500">Current password</label>
                                 <input id="update_password_current_password" name="current_password" type="password"
-                                       class="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 shadow-sm transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
+                                       class="block min-h-11 w-full min-w-0 rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-base text-slate-900 shadow-sm transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 sm:text-sm"
                                        autocomplete="current-password" />
                                 <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
                             </div>
@@ -99,7 +99,7 @@
                             <div>
                                 <label for="update_password_password" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500">New password</label>
                                 <input id="update_password_password" name="password" type="password"
-                                       class="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 shadow-sm transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
+                                       class="block min-h-11 w-full min-w-0 rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-base text-slate-900 shadow-sm transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 sm:text-sm"
                                        autocomplete="new-password" />
                                 <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
                             </div>
@@ -107,7 +107,7 @@
                             <div>
                                 <label for="update_password_password_confirmation" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500">Confirm new password</label>
                                 <input id="update_password_password_confirmation" name="password_confirmation" type="password"
-                                       class="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 shadow-sm transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
+                                       class="block min-h-11 w-full min-w-0 rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-base text-slate-900 shadow-sm transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 sm:text-sm"
                                        autocomplete="new-password" />
                                 <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
                             </div>
@@ -128,8 +128,8 @@
                     </section>
                 </div>
 
-                <div class="space-y-6">
-                    <section class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-900/5 transition duration-200 hover:shadow-md sm:p-8">
+                <div class="min-w-0 space-y-6 lg:flex lg:flex-col lg:justify-between lg:space-y-0">
+                    <section class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm shadow-slate-900/5 transition duration-200 hover:shadow-md sm:p-7">
                         <div class="mb-6 flex items-center gap-3">
                             <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
                                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
@@ -172,7 +172,7 @@
                         </div>
                     </section>
 
-                    <section class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-900/5 transition duration-200 hover:shadow-md sm:p-8">
+                    <section class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm shadow-slate-900/5 transition duration-200 hover:shadow-md sm:p-7">
                         <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
                             <div class="flex items-center gap-3">
                                 <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
@@ -216,8 +216,8 @@
                         </div>
                     @endif
 
-                    <section class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-900/5 transition duration-200 hover:shadow-md sm:p-8">
-                        <div class="mb-4 flex items-center gap-3">
+                    <section class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm shadow-slate-900/5 transition duration-200 hover:shadow-md sm:p-7">
+                        <div class="mb-4 flex flex-wrap items-center gap-3">
                             <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
                                 <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.18-.08-.05-.19-.02-.27 0-.11.03-1.88 1.2-3.32 2.17-.21.14-.4.21-.57.21-.16 0-.38-.05-.62-.13-.39-.13-1.12-.34-1.52-.51-.53-.22-.76-.34-.72-.73.02-.19.14-.38.38-.59 1.5-1.01 5.03-2.48 7.08-3.32 3.37-1.39 4.07-1.63 4.52-1.64.1 0 .31.02.43.13.1.09.13.21.14.31-.01.04-.01.12-.02.25z"/></svg>
                             </span>

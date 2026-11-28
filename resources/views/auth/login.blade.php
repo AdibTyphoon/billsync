@@ -2,11 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - BillSync</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="BillSync">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="apple-touch-icon" href="/images/icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png">
+    <title>BillSync - Sign in</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function (error) {
+                    console.warn('BillSync offline support could not be enabled.', error);
+                });
+            });
+        }
+    </script>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen font-sans antialiased">
+<body class="flex min-h-screen min-w-0 items-center justify-center overflow-x-clip bg-gray-50 font-sans antialiased">
     
     <div class="flex flex-col md:flex-row bg-white rounded-[2rem] shadow-2xl overflow-hidden max-w-5xl w-full mx-4 sm:mx-8">
         

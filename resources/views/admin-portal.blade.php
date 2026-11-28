@@ -37,7 +37,7 @@
     </style>
 
     <div class="bs-backdrop relative min-h-screen bg-slate-50 py-10 sm:py-12">
-        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="mx-auto min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8">
 
             <!-- Notifikasi Berjaya -->
             @if (session('success'))

@@ -4,7 +4,7 @@
   "short_name": "BillSync",
   "description": "Keep your bills and due dates together.",
   "lang": "en-MY",
-  "start_url": "/",
+  "start_url": "/dashboard",
   "scope": "/",
   "display": "standalone",
   "background_color": "#f8fafc",
